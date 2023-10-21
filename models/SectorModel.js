@@ -15,7 +15,7 @@ const SectorSchema = mongoose.Schema({
   message: { type: String, required: true, trim: true },
   location: { type: Object, required: true },
   tasks: [tasksSchema],
-  map_official: { type: Boolean, required: true, default: false },
+  official: { type: Boolean, required: true, default: false },
   createdAt: { type: Date, required: true, default: new Date() },
 });
 
