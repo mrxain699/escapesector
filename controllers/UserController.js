@@ -35,6 +35,7 @@ class UserController {
                 status: "success",
                 message: "User Registered Successfully",
                 token: token,
+                user: saved_user,
               });
             })
             .catch((err) => {
