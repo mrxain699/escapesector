@@ -59,6 +59,46 @@ class UserController {
       res.send({ status: "Failed", message: "User not found" });
     }
   };
+
+  static login = async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      if (username && password) {
+        const user = await UserModel.findOne({ username: username });
+        if (user != null) {
+          const isMatch = await bcrypt.compare(password, user.password);
+          if (user.username === username && isMatch) {
+            const token = jwt.sign(
+              {
+                id: user._id,
+              },
+              process.env.JWT_SECRET,
+              { expiresIn: "10d" }
+            );
+            res.send({
+              status: "success",
+              message: "Login Successfully",
+              token: token,
+            });
+          } else {
+            res.send({
+              status: "Failed",
+              message: "Invalid username or password",
+            });
+          }
+        } else {
+          res.send({
+            status: "Failed",
+            message: "Invalid username or password",
+          });
+        }
+      } else {
+        res.send({ status: "Failed", message: "Both fields are required" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
 
 export default UserController;

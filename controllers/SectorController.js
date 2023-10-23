@@ -55,6 +55,79 @@ class SectorController {
       res.send({ status: "Failed", message: "Sectors not found" });
     }
   };
+
+  // Function that fetch missions that are nearby to user
+  static get_nearby_sectors = async (req, res) => {
+    try {
+      const { lat, long, official } = req.params;
+      if (lat && long) {
+        const sectors = await SectorModel.find({ official: official });
+        if (sectors.length > 0) {
+          const maxRadius = 50; // Maximum radius in kilometers
+          const nearby_sectors = SectorController.findNearbySectors(
+            lat,
+            long,
+            sectors,
+            maxRadius
+          );
+          if (nearby_sectors.length > 0) {
+            res.send({ status: "success", sectors: nearby_sectors });
+          } else {
+            res.send({ status: "Failed", message: "No sectors found" });
+          }
+        }
+      } else {
+        res.send({ status: "Failed", message: "Invalid Parameters" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Function thet calculate distance using haversine formula and return the distance
+  static haversine = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Earth radius in kilometers
+
+    // Convert latitude and longitude from degrees to radians
+    const toRadians = (angle) => angle * (Math.PI / 180);
+    lat1 = toRadians(lat1);
+    lon1 = toRadians(lon1);
+    lat2 = toRadians(lat2);
+    lon2 = toRadians(lon2);
+
+    // Differences in coordinates
+    const dlat = lat2 - lat1;
+    const dlon = lon2 - lon1;
+
+    // Haversine formula
+    const a =
+      Math.sin(dlat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return distance;
+  };
+
+  static findNearbySectors = (userLat, userLon, sectors, maxRadius) => {
+    const nearbySectors = [];
+
+    for (const sector of sectors) {
+      const sectorLat = sector.location.latitude;
+      const sectorLon = sector.location.longitude;
+      const distance = SectorController.haversine(
+        userLat,
+        userLon,
+        sectorLat,
+        sectorLon
+      );
+      if (distance <= maxRadius) {
+        nearbySectors.push(sector);
+      }
+    }
+
+    return nearbySectors;
+  };
 }
 
 export default SectorController;

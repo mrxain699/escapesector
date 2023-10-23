@@ -5,7 +5,12 @@ const UserSchema = mongoose.Schema({
   location: { type: Object, required: true, trim: true },
   score: { type: Number },
   image: { type: String, trim: true },
-  created_at: { type: Date, required: true, trim: true },
+  created_at: {
+    type: Date,
+    required: true,
+    trim: true,
+    default: new Date(),
+  },
 });
 
 const UserModel = mongoose.model("users", UserSchema);
