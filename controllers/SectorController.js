@@ -3,19 +3,32 @@ import SectorModel from "../models/SectorModel.js";
 class SectorController {
   // Funtion that saved sector into database
   static add_sector = async (req, res) => {
-    const { title, difficulty, duration, message, location, tasks } = req.body;
+    const {
+      title,
+      difficulty,
+      duration,
+      distance,
+      message,
+      location,
+      tasks,
+      official,
+      creator,
+    } = req.body;
     if (
-      (title && difficulty && duration && message && location, tasks.length > 0)
+      (title && difficulty && duration && distance && message && location,
+      tasks.length > 0)
     ) {
       try {
         const sector = await new SectorModel({
           title: title,
           difficulty: difficulty,
+          distance: distance,
           duration: duration,
           message: message,
           location: location,
           tasks: tasks,
-          official: false,
+          official: official,
+          creator: creator,
         });
         await sector
           .save()

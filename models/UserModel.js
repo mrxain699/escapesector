@@ -13,6 +13,12 @@ const UserSchema = mongoose.Schema({
   },
 });
 
-const UserModel = mongoose.model("users", UserSchema);
+const AdminSchema = mongoose.Schema({
+  username: { type: String, required: true, trim: true, unqiue: true },
+  password: { type: String, required: true, trim: true },
+});
 
-export default UserModel;
+const UserModel = mongoose.model("users", UserSchema);
+const AdminModel = mongoose.model("admins", AdminSchema);
+
+export { UserModel, AdminModel };

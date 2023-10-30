@@ -13,7 +13,8 @@ const router = express.Router();
 // User Routes
 router.get("/", UserController.getAllUser);
 router.post("/register", UserController.register);
-router.post("/login", UserController.register);
+router.post("/login", UserController.login);
+router.post("/auth", UserController.authenticate);
 
 // Sector Routes
 router.get("/official-sectors", SectorController.get_all_official_sectors);
