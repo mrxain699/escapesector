@@ -25,7 +25,7 @@ router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 
 // Web Api middleware
-router.use("/users", validate_request);
+router.use("/user", validate_request);
 
 // Web Api User Routes
 router.post("/auth", UserController.authenticate);
