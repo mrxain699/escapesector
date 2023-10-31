@@ -128,6 +128,10 @@ class UserController {
       res.send({ status: "Failed", message: "Both fields are required" });
     }
   };
+
+  static loggedUser = (req, res) => {
+    res.send({ user: req.user });
+  };
 }
 
 export default UserController;
