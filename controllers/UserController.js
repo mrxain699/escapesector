@@ -1,7 +1,5 @@
 import { UserModel, AdminModel } from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
-import { Admin } from "mongodb";
-import mongoose from "mongoose";
 
 class UserController {
   static register = async (req, res) => {
