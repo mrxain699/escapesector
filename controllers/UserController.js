@@ -1,5 +1,6 @@
 import { UserModel, AdminModel } from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 class UserController {
   static register = async (req, res) => {
