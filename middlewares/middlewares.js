@@ -8,7 +8,7 @@ const validate_request = (model) => {
       try {
         token = authorization.split(" ")[1];
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = await model.findById(id);
+        req.user = await model.findById(id).select("-password");
         next();
       } catch (error) {
         console.log(error);
