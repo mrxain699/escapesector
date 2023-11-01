@@ -18,14 +18,8 @@ class SectorController {
       image,
     } = req.body;
     if (image) {
-      const uploadsDirectory = "./uploads";
-      if (!fs.existsSync(uploadsDirectory)) {
-        fs.mkdirSync(uploadsDirectory);
-      }
       const ext = image.split(";base64,/")[0].split("/").pop();
-      const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-      const imageBuffer = Buffer.from(base64Data, "base64");
-      filename = path.join(uploadsDirectory, "image_" + Date.now() + `.${ext}`);
+      filename = path.join("image_" + Date.now() + `.${ext}`);
     }
 
     if (
