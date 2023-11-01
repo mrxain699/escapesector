@@ -12,7 +12,7 @@ const DATABASE_URI = process.env.DATABASE_URI;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["*", "http://localhost:5173"],
   })
 );
 app.use(
