@@ -28,7 +28,9 @@ class SectorController {
       tasks.length > 0
     ) {
       try {
-        const image = image ? "image" : "";
+        if (image) {
+          image = "image";
+        }
         const sector = await new SectorModel({
           title: title,
           difficulty: difficulty,
