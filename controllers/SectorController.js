@@ -1,8 +1,10 @@
 import SectorModel from "../models/SectorModel.js";
-
+import fs from "fs";
+import path from "path";
 class SectorController {
   // Funtion that saved sector into database
   static add_sector = async (req, res) => {
+    let filename = null;
     const {
       title,
       difficulty,
@@ -15,6 +17,16 @@ class SectorController {
       creator,
       image,
     } = req.body;
+    if (image.length > 0) {
+      const uploadsDirectory = "./uploads";
+      if (!fs.existsSync(uploadsDirectory)) {
+        fs.mkdirSync(uploadsDirectory);
+      }
+      const ext = image.split(";base64,/")[0].split("/").pop();
+      const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+      const imageBuffer = Buffer.from(base64Data, "base64");
+      filename = path.join(uploadsDirectory, "image_" + Date.now() + `.${ext}`);
+    }
 
     if (
       title &&
@@ -37,7 +49,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: image,
+          image: filname ? filename : image,
         });
         await sector
           .save()
