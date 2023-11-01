@@ -17,10 +17,9 @@ class SectorController {
       creator,
       image,
     } = req.body;
-    if (image) {
-      const ext = image.split(";base64,/")[0].split("/").pop();
-      filename = path.join("image_" + Date.now() + `.${ext}`);
-    }
+
+    const ext = image.split(";base64,/")[0].split("/").pop();
+    filename = path.join("image_" + Date.now() + `.${ext}`);
 
     if (
       title &&
