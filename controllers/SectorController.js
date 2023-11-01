@@ -18,15 +18,14 @@ class SectorController {
       image,
     } = req.body;
     if (image) {
-      console.log(image);
-      // const uploadsDirectory = "./uploads";
-      // if (!fs.existsSync(uploadsDirectory)) {
-      //   fs.mkdirSync(uploadsDirectory);
-      // }
-      // const ext = image.split(";base64,/")[0].split("/").pop();
-      // const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-      // const imageBuffer = Buffer.from(base64Data, "base64");
-      // filename = path.join(uploadsDirectory, "image_" + Date.now() + `.${ext}`);
+      const uploadsDirectory = "./uploads";
+      if (!fs.existsSync(uploadsDirectory)) {
+        fs.mkdirSync(uploadsDirectory);
+      }
+      const ext = image.split(";base64,/")[0].split("/").pop();
+      const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+      const imageBuffer = Buffer.from(base64Data, "base64");
+      filename = path.join(uploadsDirectory, "image_" + Date.now() + `.${ext}`);
     }
 
     if (
@@ -50,7 +49,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: image,
+          image: filename ? filename : image,
         });
         await sector
           .save()
