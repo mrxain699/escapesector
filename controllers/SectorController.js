@@ -37,7 +37,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: filename,
+          image: image,
         });
         await sector
           .save()
