@@ -13,10 +13,18 @@ class SectorController {
       tasks,
       official,
       creator,
+      image,
     } = req.body;
+
     if (
-      (title && difficulty && duration && distance && message && location,
-      tasks.length > 0)
+      title &&
+      difficulty &&
+      duration &&
+      distance &&
+      message &&
+      location &&
+      creator &&
+      tasks.length > 0
     ) {
       try {
         const sector = await new SectorModel({
@@ -29,6 +37,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
+          image: image ? image : "",
         });
         await sector
           .save()
