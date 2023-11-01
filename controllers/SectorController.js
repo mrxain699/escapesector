@@ -1,5 +1,6 @@
 import SectorModel from "../models/SectorModel.js";
-import upload_image from "../utils/ImageUpload.js";
+import fs from "fs";
+import path from "path";
 class SectorController {
   // Funtion that saved sector into database
   static add_sector = async (req, res) => {
@@ -27,9 +28,26 @@ class SectorController {
       tasks.length > 0
     ) {
       try {
-        if (image) {
-          image = upload_image(image);
+        const uploadsDirectory = "./uploads";
+        if (!fs.existsSync(uploadsDirectory)) {
+          fs.mkdirSync(uploadsDirectory);
         }
+        const ext = image.split(";base64,/")[0].split("/").pop();
+        const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+        const imageBuffer = Buffer.from(base64Data, "base64");
+        const filename = path.join(
+          uploadsDirectory,
+          "image_" + Date.now() + `.${ext}`
+        );
+
+        fs.writeFile(filename, imageBuffer, (err) => {
+          if (err) {
+            console.error("Error saving the file:", err);
+            res.status(500).send("Error saving the file");
+          } else {
+            console.log(`Image saved at: ${filename}`);
+          }
+        });
         const sector = await new SectorModel({
           title: title,
           difficulty: difficulty,
@@ -40,7 +58,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: image,
+          image: filename,
         });
         await sector
           .save()
