@@ -2,7 +2,7 @@ import SectorModel from "../models/SectorModel.js";
 import fs from "fs";
 class SectorController {
   // Funtion that saved sector into database
-  imagePathWithFileName = "";
+
   static add_sector = async (req, res) => {
     const {
       title,
@@ -27,17 +27,6 @@ class SectorController {
       creator &&
       tasks.length > 0
     ) {
-      if (image) {
-        const imageBuffer = Buffer.from(image, "base64");
-        const imagePath = "../upload"; // Set the path where you want to store the images
-
-        // Generate a unique filename using uuid
-        const imageName = Date.now() + "_image.png";
-        imagePathWithFileName = imagePath + imageName;
-
-        // Save the image to the file system
-        fs.writeFileSync(imagePathWithFileName, imageBuffer);
-      }
       try {
         const sector = await new SectorModel({
           title: title,
@@ -49,7 +38,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: imagePathWithFileName,
+          image: image,
         });
         await sector
           .save()
