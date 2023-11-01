@@ -1,5 +1,5 @@
 import SectorModel from "../models/SectorModel.js";
-
+import upload_image from "../utils/ImageUpload.js";
 class SectorController {
   // Funtion that saved sector into database
   static add_sector = async (req, res) => {
@@ -27,6 +27,9 @@ class SectorController {
       tasks.length > 0
     ) {
       try {
+        if (image) {
+          image = upload_image(image);
+        }
         const sector = await new SectorModel({
           title: title,
           difficulty: difficulty,
@@ -37,7 +40,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: image ? image : "",
+          image: image,
         });
         await sector
           .save()
