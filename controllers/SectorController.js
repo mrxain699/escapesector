@@ -4,7 +4,6 @@ import path from "path";
 class SectorController {
   // Funtion that saved sector into database
   static add_sector = async (req, res) => {
-    let filename = null;
     const {
       title,
       difficulty,
@@ -18,9 +17,6 @@ class SectorController {
       image,
     } = req.body;
 
-    const ext = image.split(";base64,/")[0].split("/").pop();
-    filename = path.join("image_" + Date.now() + `.${ext}`);
-
     if (
       title &&
       difficulty &&
@@ -32,6 +28,7 @@ class SectorController {
       tasks.length > 0
     ) {
       try {
+        const image = image ? "image" : "";
         const sector = await new SectorModel({
           title: title,
           difficulty: difficulty,
@@ -42,7 +39,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: filename ? filename : image,
+          image: image,
         });
         await sector
           .save()
