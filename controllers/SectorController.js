@@ -28,9 +28,6 @@ class SectorController {
       tasks.length > 0
     ) {
       try {
-        if (image) {
-          image = "image";
-        }
         const sector = await new SectorModel({
           title: title,
           difficulty: difficulty,
@@ -41,7 +38,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: image,
+          image: image ? image.split(";base64,/")[0].split("/")[0] : "",
         });
         await sector
           .save()
