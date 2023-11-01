@@ -1,6 +1,4 @@
 import SectorModel from "../models/SectorModel.js";
-import fs from "fs";
-import path from "path";
 class SectorController {
   // Funtion that saved sector into database
   static add_sector = async (req, res) => {
@@ -38,7 +36,7 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: image ? image.split(";base64,/")[0].split("/")[0] : "",
+          image: image ? image.split(",")[0] : "",
         });
         await sector
           .save()
