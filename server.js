@@ -10,7 +10,11 @@ dotenv.config();
 const PORT = process.env.PORT;
 const DATABASE_URI = process.env.DATABASE_URI;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(
   express.json({
     limit: "100mb",
