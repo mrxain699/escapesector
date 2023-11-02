@@ -183,10 +183,7 @@ class SectorController {
     try {
       const { sectorId } = req.params;
       if (sectorId) {
-        const deleted_sector = await SectorModel.deleteOneById({
-          _id,
-          sectorId,
-        });
+        const deleted_sector = await SectorModel.deleteOne({ _id: sectorId });
         if (deleted_sector) {
           res.send({
             status: "success",
