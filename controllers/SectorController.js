@@ -88,6 +88,24 @@ class SectorController {
     }
   };
 
+  static get_sector_tasks = async (req, res) => {
+    try {
+      const { sectorId } = req.params;
+      if (sectorId) {
+        const tasks = await SectorModel.find({ _id: sectorId });
+        if (tasks.length > 0) {
+          res.send({ status: "success", sector_tasks: tasks });
+        } else {
+          res.send({ status: "Failed", message: "No tasks found" });
+        }
+      } else {
+        res.send({ status: "Failed", message: "No tasks found" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Function that fetch missions that are nearby to user
   static get_nearby_sectors = async (req, res) => {
     try {

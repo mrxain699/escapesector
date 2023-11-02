@@ -20,6 +20,7 @@ router.get(
   SectorController.get_nearby_sectors
 );
 router.post("/add-sector", SectorController.add_sector);
+router.get("/tasks/:sectorId/", SectorController.get_sector_tasks);
 
 // Game Api User Routes
 router.get("/", UserController.getAllUser);
