@@ -178,6 +178,30 @@ class SectorController {
 
     return nearbySectors;
   };
+
+  static delete_sector = async (req, res) => {
+    try {
+      const { sectorId } = req.params;
+      if (sectorId) {
+        const deleted_sector = await SectorModel.deleteOneById({
+          _id,
+          sectorId,
+        });
+        if (deleted_sector) {
+          res.send({
+            status: "success",
+            message: "Sector Deleted successfully",
+          });
+        } else {
+          res.send({ status: "Failed", message: "Failed to delete sector" });
+        }
+      } else {
+        res.send({ status: "Failed", message: "No sector found to delete" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 }
 
 export default SectorController;

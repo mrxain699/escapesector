@@ -21,6 +21,7 @@ router.get(
 );
 router.post("/add-sector", SectorController.add_sector);
 router.get("/tasks/:sectorId/", SectorController.get_sector_tasks);
+router.get("/delete-sector/:sectorId", SectorController.delete_sector);
 
 // Game Api User Routes
 router.get("/", UserController.getAllUser);
