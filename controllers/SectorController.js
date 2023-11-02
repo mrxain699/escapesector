@@ -1,8 +1,6 @@
 import SectorModel from "../models/SectorModel.js";
-import fs from "fs";
+import upload_image from "../utils/ImageUpload.js";
 class SectorController {
-  // Funtion that saved sector into database
-
   static add_sector = async (req, res) => {
     const {
       title,
@@ -14,7 +12,6 @@ class SectorController {
       tasks,
       official,
       creator,
-      image,
     } = req.body;
 
     if (
@@ -28,6 +25,19 @@ class SectorController {
       tasks.length > 0
     ) {
       try {
+        const uploadPromises = tasks.map(async (task) => {
+          if (task.image) {
+            return upload_image(task.image);
+          }
+          return null;
+        });
+        const uploadedImages = await Promise.all(uploadPromises);
+        tasks.forEach((task, index) => {
+          if (task.image) {
+            task.image = uploadedImages[index];
+          }
+        });
+
         const sector = await new SectorModel({
           title: title,
           difficulty: difficulty,
@@ -38,7 +48,6 @@ class SectorController {
           tasks: tasks,
           official: official,
           creator: creator,
-          image: image,
         });
         await sector
           .save()
