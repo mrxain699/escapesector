@@ -92,9 +92,9 @@ class SectorController {
     try {
       const { sectorId } = req.params;
       if (sectorId) {
-        const tasks = await SectorModel.find({ _id: sectorId });
-        if (tasks.length > 0) {
-          res.send({ status: "success", sector_tasks: tasks });
+        const sector = await SectorModel.find({ _id: sectorId });
+        if (sector && sector.tasks.length > 0) {
+          res.send({ status: "success", sector_tasks: sector.tasks });
         } else {
           res.send({ status: "Failed", message: "No tasks found" });
         }
