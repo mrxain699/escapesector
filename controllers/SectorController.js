@@ -68,6 +68,22 @@ class SectorController {
     }
   };
 
+  static get_sector = async (req, res) => {
+    try {
+      const { sectorId } = req.params;
+      if (sectorId) {
+        const sector = await SectorModel.findOne({ _id: sectorId });
+        if (sector) {
+          res.send({ status: "success", sector: sector });
+        } else {
+          res.send({ status: "failed", message: "No Sector Found" });
+        }
+      }
+    } catch (error) {
+      req.send({ status: "failed", message: "Unable to connect" });
+    }
+  };
+
   // Function that fetch official sector from database and return as a response
   static get_all_official_sectors = async (req, res) => {
     const official_sectors = await SectorModel.find({ official: true });

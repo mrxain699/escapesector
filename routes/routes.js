@@ -13,13 +13,13 @@ const router = express.Router();
 // router.use("/add-sector", validate_request);
 
 // Game Api Sector Routes
+router.post("/add-sector", SectorController.add_sector);
 router.get("/official-sectors", SectorController.get_all_official_sectors);
 router.get("/community-sectors", SectorController.get_all_community_sectors);
 router.get(
   "/nearby-sectors/:lat/:long/:official",
   SectorController.get_nearby_sectors
 );
-router.post("/add-sector", SectorController.add_sector);
 
 // Game Api User Routes
 router.get("/", UserController.getAllUser);
@@ -34,6 +34,7 @@ router.post("/auth", UserController.authenticate);
 router.get("/user", UserController.loggedUser);
 
 // Web api  sectors
+router.get("/sector/:sectorId", SectorController.get_sector);
 router.get("/tasks/:sectorId/", SectorController.get_sector_tasks);
 router.delete("/delete-sector/:sectorId", SectorController.delete_sector);
 router.delete("/delete-task/:sectorId/:taskId", SectorController.delete_task);
