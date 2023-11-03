@@ -199,6 +199,33 @@ class SectorController {
       console.log(error);
     }
   };
+
+  static delete_task = async (req, res) => {
+    try {
+      const { sectorId, taskId } = req.params;
+      if (taskId && sectorId) {
+        const sector = await SectorModel.findById(sectorId);
+        if (sector) {
+          const delete_task = await SectorModel.updateOne(
+            { _id: sectorId },
+            { $pull: { tasks: { _id: taskId } } }
+          );
+          if (delete_task) {
+            res.send({
+              status: "success",
+              message: "Task deleted successfully",
+            });
+          } else {
+            res.send({ status: "failed", message: "Task not deleted" });
+          }
+        } else {
+          res.send({ status: "failed", message: "No Sector Found" });
+        }
+      }
+    } catch (error) {
+      res.send({ status: "failed", message: "Unable to delete task" });
+    }
+  };
 }
 
 export default SectorController;
