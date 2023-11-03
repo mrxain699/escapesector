@@ -25,18 +25,18 @@ class SectorController {
       tasks.length > 0
     ) {
       try {
-        const uploadPromises = tasks.map(async (task) => {
-          if (task.image) {
-            return upload_image(task.image);
-          }
-          return null;
-        });
-        const uploadedImages = await Promise.all(uploadPromises);
-        tasks.forEach((task, index) => {
-          if (task.image) {
-            task.image = uploadedImages[index];
-          }
-        });
+        // const uploadPromises = tasks.map(async (task) => {
+        //   if (task.image) {
+        //     return upload_image(task.image);
+        //   }
+        //   return null;
+        // });
+        // const uploadedImages = await Promise.all(uploadPromises);
+        // tasks.forEach((task, index) => {
+        //   if (task.image) {
+        //     task.image = uploadedImages[index];
+        //   }
+        // });
 
         const sector = await new SectorModel({
           title: title,
