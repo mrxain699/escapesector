@@ -34,7 +34,12 @@ router.post("/auth", UserController.authenticate);
 router.get("/user", UserController.loggedUser);
 
 // Web api  sectors
+router.get("/sectors/:official", SectorController.sectors);
+router.post("/add-task", SectorController.add_task);
+router.post("/update-sector", SectorController.update_sector);
+router.post("/update-task", SectorController.update_task);
 router.get("/sector/:sectorId", SectorController.get_sector);
+router.get("/sector/:sectorId/:taskId", SectorController.get_sector_task);
 router.get("/tasks/:sectorId/", SectorController.get_sector_tasks);
 router.delete("/delete-sector/:sectorId", SectorController.delete_sector);
 router.delete("/delete-task/:sectorId/:taskId", SectorController.delete_task);
