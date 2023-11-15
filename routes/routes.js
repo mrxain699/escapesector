@@ -3,7 +3,6 @@ import UserController from "../controllers/UserController.js";
 import SectorController from "../controllers/SectorController.js";
 import { UserModel, AdminModel } from "../models/UserModel.js";
 import { validate_request } from "../middlewares/middlewares.js";
-import { Admin } from "mongodb";
 const router = express.Router();
 
 // Game Api middlewares
@@ -25,6 +24,7 @@ router.get(
 router.get("/", UserController.getAllUser);
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
+router.post("/save-mission", UserController.save_mission);
 
 // Web Api middleware
 router.use("/user", validate_request(AdminModel));

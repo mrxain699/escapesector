@@ -1,5 +1,4 @@
 import SectorModel from "../models/SectorModel.js";
-import upload_image from "../utils/ImageUpload.js";
 class SectorController {
   static add_sector = async (req, res) => {
     const {

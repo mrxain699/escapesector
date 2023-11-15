@@ -11,6 +11,7 @@ const UserSchema = mongoose.Schema({
     trim: true,
     default: new Date(),
   },
+  completed_tasks: { type: Array },
 });
 
 const AdminSchema = mongoose.Schema({
