@@ -62,39 +62,71 @@ class UserController {
     }
   };
 
+  // static login = async (req, res) => {
+  //   try {
+  //     const { username, password } = req.body;
+  //     if (username && password) {
+  //       const user = await UserModel.findOne({ username: username });
+  //       if (user != null) {
+  //         const isMatch = await bcrypt.compare(password, user.password);
+  //         if (user.username === username && isMatch) {
+  //           const token = jwt.sign(
+  //             {
+  //               id: user._id,
+  //             },
+  //             process.env.JWT_SECRET
+  //           );
+  //           res.send({
+  //             status: "success",
+  //             message: "Login Successfully",
+  //             token: token,
+  //           });
+  //         } else {
+  //           res.send({
+  //             status: "Failed",
+  //             message: "Invalid username or password",
+  //           });
+  //         }
+  //       } else {
+  //         res.send({
+  //           status: "Failed",
+  //           message: "Invalid username or password",
+  //         });
+  //       }
+  //     } else {
+  //       res.send({ status: "Failed", message: "Both fields are required" });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   static login = async (req, res) => {
     try {
-      const { username, password } = req.body;
-      if (username && password) {
+      const { username } = req.body;
+      if (username) {
         const user = await UserModel.findOne({ username: username });
         if (user != null) {
-          const isMatch = await bcrypt.compare(password, user.password);
-          if (user.username === username && isMatch) {
-            const token = jwt.sign(
-              {
-                id: user._id,
-              },
-              process.env.JWT_SECRET
-            );
+          if (user.username === username) {
             res.send({
               status: "success",
               message: "Login Successfully",
-              token: token,
+              user: user,
             });
           } else {
             res.send({
               status: "Failed",
-              message: "Invalid username or password",
+              message: "Invalid username",
             });
           }
         } else {
           res.send({
             status: "Failed",
-            message: "Invalid username or password",
+            message: "Invalid username",
           });
         }
       } else {
-        res.send({ status: "Failed", message: "Both fields are required" });
+        res.send({ status: "Failed", message: "Field are required" });
       }
     } catch (error) {
       console.log(error);
