@@ -18,6 +18,7 @@ class UserController {
             score: 0,
             image: "",
             completed_tasks: [],
+            unlocked_missions: [],
           });
           await user
             .save()
@@ -29,8 +30,7 @@ class UserController {
                 {
                   id: saved_user._id,
                 },
-                process.env.JWT_SECRET,
-                { expiresIn: "90d" }
+                process.env.JWT_SECRET
               );
 
               res.send({
@@ -74,8 +74,7 @@ class UserController {
               {
                 id: user._id,
               },
-              process.env.JWT_SECRET,
-              { expiresIn: "10d" }
+              process.env.JWT_SECRET
             );
             res.send({
               status: "success",
@@ -112,8 +111,7 @@ class UserController {
             {
               id: user._id,
             },
-            process.env.JWT_SECRET,
-            { expiresIn: "10d" }
+            process.env.JWT_SECRET
           );
           res.send({
             status: "success",

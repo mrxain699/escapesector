@@ -1,4 +1,5 @@
 import SectorModel from "../models/SectorModel.js";
+import { v4 as uuidv4 } from "uuid";
 class SectorController {
   static add_sector = async (req, res) => {
     const {

@@ -12,6 +12,7 @@ const UserSchema = mongoose.Schema({
     default: new Date(),
   },
   completed_tasks: { type: Array },
+  unlocked_missions: { type: Array },
 });
 
 const AdminSchema = mongoose.Schema({

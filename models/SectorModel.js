@@ -21,6 +21,7 @@ const SectorSchema = mongoose.Schema({
   tasks: [tasksSchema],
   creator: { type: String, required: true, trim: true },
   official: { type: Boolean, required: true, default: false },
+  locked_key: { type: String, trim: true },
   createdAt: { type: Date, required: true, default: new Date() },
 });
 
