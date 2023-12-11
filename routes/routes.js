@@ -1,8 +1,10 @@
 import express from "express";
 import UserController from "../controllers/UserController.js";
 import SectorController from "../controllers/SectorController.js";
+import SideQuestController from "../controllers/SideQuestController.js";
 import { UserModel, AdminModel } from "../models/UserModel.js";
 import { validate_request } from "../middlewares/middlewares.js";
+
 const router = express.Router();
 
 // Game Api middlewares
@@ -43,5 +45,10 @@ router.get("/sector/:sectorId/:taskId", SectorController.get_sector_task);
 router.get("/tasks/:sectorId/", SectorController.get_sector_tasks);
 router.delete("/delete-sector/:sectorId", SectorController.delete_sector);
 router.delete("/delete-task/:sectorId/:taskId", SectorController.delete_task);
+
+// Web api side quests
+
+router.post("/sidequest", SideQuestController.add_side_quest);
+router.get("/sidequests/:mission_id", SideQuestController.get_side_quests);
 
 export default router;
