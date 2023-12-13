@@ -49,9 +49,36 @@ class SideQuestController {
       try {
         const quests = await SideQuestModel.find({ mission_id: mission_id });
         if (quests && quests.length > 0) {
-          res.send({ status: "success", message: quests });
+          res.send({ status: "success", sector_quests: quests });
         } else {
           res.send({ status: "failed", message: "Side Quests not found." });
+        }
+      } catch (error) {
+        res.send({
+          status: "failed",
+          message: error.message,
+        });
+      }
+    } else {
+      res.send({
+        status: "failed",
+        message: "Invalid Parameters",
+      });
+    }
+  };
+
+  static get_side_quest = async (req, res) => {
+    const { quest_id } = req.params;
+    if (quest_id) {
+      try {
+        const quest = await SideQuestModel.findOne({ _id: quest_id });
+        if (quest) {
+          res.send({
+            status: "success",
+            quest: quest,
+          });
+        } else {
+          res.send({ status: "failed", message: "Side Quest not found." });
         }
       } catch (error) {
         res.send({
@@ -113,7 +140,7 @@ class SideQuestController {
     }
   };
 
-  static delete_side_quests = async (req, res) => {
+  static delete_side_quest = async (req, res) => {
     const { quest_id } = req.params;
     if (quest_id) {
       try {

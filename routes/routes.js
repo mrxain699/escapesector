@@ -47,8 +47,13 @@ router.delete("/delete-sector/:sectorId", SectorController.delete_sector);
 router.delete("/delete-task/:sectorId/:taskId", SectorController.delete_task);
 
 // Web api side quests
-
 router.post("/sidequest", SideQuestController.add_side_quest);
+router.put("/sidequest/update", SideQuestController.update_side_quest);
 router.get("/sidequests/:mission_id", SideQuestController.get_side_quests);
+router.get("/sidequest/:quest_id", SideQuestController.get_side_quest);
+router.delete(
+  "/sidequest/delete/:quest_id",
+  SideQuestController.delete_side_quest
+);
 
 export default router;
