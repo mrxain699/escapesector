@@ -38,10 +38,11 @@ class SectorController {
         });
         await sector
           .save()
-          .then(() => {
+          .then((savedDoc) => {
             res.send({
               status: "success",
               message: " Mission saved successfully",
+              mission_id: savedDoc._id,
             });
           })
           .catch(() => {
