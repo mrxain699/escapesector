@@ -20,6 +20,7 @@ class UserController {
             completed_tasks: [],
             unlocked_missions: [],
           });
+          const expiresIn = 7 * 24 * 60 * 60;
           await user
             .save()
             .then(async () => {
@@ -30,7 +31,8 @@ class UserController {
                 {
                   id: saved_user._id,
                 },
-                process.env.JWT_SECRET
+                process.env.JWT_SECRET,
+                { expiresIn: expiresIn }
               );
 
               res.send({
@@ -139,11 +141,13 @@ class UserController {
       try {
         const user = await AdminModel.findOne({ username: username });
         if (user && user.password === password) {
+          const expiresIn = 7 * 24 * 60 * 60;
           const token = jwt.sign(
             {
               id: user._id,
             },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
+            { expiresIn: expiresIn }
           );
           res.send({
             status: "success",
@@ -162,7 +166,11 @@ class UserController {
   };
 
   static loggedUser = (req, res) => {
-    res.send({ user: req.user });
+    if (req.user) {
+      res.send({ status: "success", user: req.user });
+    } else {
+      res.send({ status: "failed", message: "Unauthorized User" });
+    }
   };
 
   static save_mission = async (req, res) => {
