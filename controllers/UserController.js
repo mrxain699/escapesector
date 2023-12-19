@@ -2,43 +2,46 @@ import { UserModel, AdminModel } from "../models/UserModel.js";
 import SectorModel from "../models/SectorModel.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 class UserController {
   static register = async (req, res) => {
-    const { username, location } = req.body;
+    const { username, password, location } = req.body;
     const user = await UserModel.findOne({ username: username });
     if (user) {
       res.send({ status: "failed", message: "Username already in use" });
     } else {
-      if (username && location) {
+      if (username && password && location) {
+        const salt = await bcrypt.genSalt(10);
+        const hashPassword = await bcrypt.hash(password, salt);
         try {
           const user = new UserModel({
             username: username,
+            password: hashPassword,
             location: location,
             score: 0,
             image: "",
             completed_tasks: [],
             unlocked_missions: [],
           });
-          const expiresIn = 7 * 24 * 60 * 60;
+          // const expiresIn = 7 * 24 * 60 * 60;
           await user
             .save()
             .then(async () => {
               const saved_user = await UserModel.findOne({
                 username: username,
-              });
-              const token = jwt.sign(
-                {
-                  id: saved_user._id,
-                },
-                process.env.JWT_SECRET,
-                { expiresIn: expiresIn }
-              );
+              }).select("-password");
+              // const token = jwt.sign(
+              //   {
+              //     id: saved_user._id,
+              //   },
+              //   process.env.JWT_SECRET,
+              //   { expiresIn: expiresIn }
+              // );
 
               res.send({
                 status: "success",
                 message: "User Registered Successfully",
-                token: token,
                 user: saved_user,
               });
             })
@@ -64,52 +67,20 @@ class UserController {
     }
   };
 
-  // static login = async (req, res) => {
-  //   try {
-  //     const { username, password } = req.body;
-  //     if (username && password) {
-  //       const user = await UserModel.findOne({ username: username });
-  //       if (user != null) {
-  //         const isMatch = await bcrypt.compare(password, user.password);
-  //         if (user.username === username && isMatch) {
-  //           const token = jwt.sign(
-  //             {
-  //               id: user._id,
-  //             },
-  //             process.env.JWT_SECRET
-  //           );
-  //           res.send({
-  //             status: "success",
-  //             message: "Login Successfully",
-  //             token: token,
-  //           });
-  //         } else {
-  //           res.send({
-  //             status: "Failed",
-  //             message: "Invalid username or password",
-  //           });
-  //         }
-  //       } else {
-  //         res.send({
-  //           status: "Failed",
-  //           message: "Invalid username or password",
-  //         });
-  //       }
-  //     } else {
-  //       res.send({ status: "Failed", message: "Both fields are required" });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   static login = async (req, res) => {
     try {
-      const { username } = req.body;
-      if (username) {
+      const { username, password } = req.body;
+      if (username && password) {
         const user = await UserModel.findOne({ username: username });
         if (user != null) {
-          if (user.username === username) {
+          const isMatch = await bcrypt.compare(password, user.password);
+          if (user.username === username && isMatch) {
+            // const token = jwt.sign(
+            //   {
+            //     id: user._id,
+            //   },
+            //   process.env.JWT_SECRET
+            // );
             res.send({
               status: "success",
               message: "Login Successfully",
@@ -118,22 +89,54 @@ class UserController {
           } else {
             res.send({
               status: "Failed",
-              message: "Invalid username",
+              message: "Invalid username or password",
             });
           }
         } else {
           res.send({
             status: "Failed",
-            message: "Invalid username",
+            message: "Invalid username or password",
           });
         }
       } else {
-        res.send({ status: "Failed", message: "Field are required" });
+        res.send({ status: "Failed", message: "Both fields are required" });
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  // static login = async (req, res) => {
+  //   try {
+  //     const { username } = req.body;
+  //     if (username) {
+  //       const user = await UserModel.findOne({ username: username });
+  //       if (user != null) {
+  //         if (user.username === username) {
+  //           res.send({
+  //             status: "success",
+  //             message: "Login Successfully",
+  //             user: user,
+  //           });
+  //         } else {
+  //           res.send({
+  //             status: "Failed",
+  //             message: "Invalid username",
+  //           });
+  //         }
+  //       } else {
+  //         res.send({
+  //           status: "Failed",
+  //           message: "Invalid username",
+  //         });
+  //       }
+  //     } else {
+  //       res.send({ status: "Failed", message: "Field are required" });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   static authenticate = async (req, res) => {
     const { username, password } = req.body;
