@@ -6,7 +6,8 @@ class LeaderboardController {
       mission_id &&
       ranked_user.user_id &&
       ranked_user.username &&
-      ranked_user.rank
+      ranked_user.rank &&
+      ranked_user.time_completed
     ) {
       try {
         const isMissionExist = await LeaderboardModel.findOne({

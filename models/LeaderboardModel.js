@@ -5,10 +5,8 @@ const rankedUserSchema = mongoose.Schema({
   username: { type: String, required: true, trim: true },
   rank: { type: String, required: true, trim: true },
   time_completed: {
-    type: Date,
+    type: Number,
     required: true,
-    trim: true,
-    default: new Date().getTime(),
   },
 });
 
