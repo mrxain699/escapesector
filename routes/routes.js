@@ -2,6 +2,7 @@ import express from "express";
 import UserController from "../controllers/UserController.js";
 import SectorController from "../controllers/SectorController.js";
 import SideQuestController from "../controllers/SideQuestController.js";
+import LeaderboardController from "../controllers/LeaderboardController.js";
 import { UserModel, AdminModel } from "../models/UserModel.js";
 import { validate_request } from "../middlewares/middlewares.js";
 
@@ -28,6 +29,13 @@ router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 router.post("/save-mission", UserController.save_mission);
 
+// Leaderboard Routes
+router.post("/leaderboard", LeaderboardController.AddLeader);
+router.get("/leaderboard/:missionId", LeaderboardController.getLeader);
+router.get(
+  "/leaderboard/:missionId/:userId",
+  LeaderboardController.getUserFromLeader
+);
 // Web Api middleware
 router.use("/user", validate_request(AdminModel));
 
