@@ -56,10 +56,13 @@ class LeaderboardController {
     const { missionId } = req.params;
     if (missionId) {
       try {
-        const ranked_users = await LeaderboardModel.findOne({
+        const leaderboard = await LeaderboardModel.findOne({
           mission_id: missionId,
         });
-        if (ranked_users) {
+        if (leaderboard) {
+          const ranked_users = leaderboard.ranked_users.sort(
+            (a, b) => a.time_completed - b.time_completed
+          );
           res.send({ status: "success", ranked_user_list: ranked_users });
         } else {
           res.send({ status: "failed", message: "Ranked users not found" });
