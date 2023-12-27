@@ -13,20 +13,49 @@ class LeaderboardController {
           mission_id: mission_id,
         });
         if (isMissionExist) {
-          const add_user_rank = await LeaderboardModel.updateOne(
-            { mission_id: mission_id },
-            { $push: { ranked_users: ranked_user } }
-          );
-          if (add_user_rank.modifiedCount > 0) {
-            res.send({
-              status: "success",
-              message: "User rank added successfully",
-            });
+          const isUserExist = await LeaderboardModel.findOne({
+            mission_id: mission_id,
+            ranked_users: { $elemMatch: { user_id: ranked_user.user_id } },
+          });
+          if (isUserExist) {
+            const updateUserRank = await LeaderboardModel.updateOne(
+              {
+                mission_id: mission_id,
+                "ranked_users.user_id": ranked_user.user_id,
+              },
+              {
+                $set: {
+                  "ranked_users.$.time_completed": ranked_user.time_completed,
+                },
+              }
+            );
+            if (updateUserRank.modifiedCount > 0) {
+              res.send({
+                status: "success",
+                message: "User rank update successfully",
+              });
+            } else {
+              res.send({
+                status: "failed",
+                message: "Rank Update Error",
+              });
+            }
           } else {
-            res.send({
-              status: "failed",
-              message: "Something went wrong",
-            });
+            const add_user_rank = await LeaderboardModel.updateOne(
+              { mission_id: mission_id },
+              { $push: { ranked_users: ranked_user } }
+            );
+            if (add_user_rank.modifiedCount > 0) {
+              res.send({
+                status: "success",
+                message: "User rank added successfully",
+              });
+            } else {
+              res.send({
+                status: "failed",
+                message: "User rank not added",
+              });
+            }
           }
         } else {
           const leaderboard = new LeaderboardModel({
