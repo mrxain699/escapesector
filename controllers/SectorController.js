@@ -425,12 +425,18 @@ class SectorController {
         if (isMissionExist && isUserExist) {
           const unlocked_mission = await UserModel.updateOne(
             { _id: user_id },
-            { $push: { unlocked_missions: mission_id } }
+            { $addToSet: { unlocked_missions: mission_id } }
           );
+          console.log(unlocked_mission);
           if (unlocked_mission.modifiedCount > 0) {
             res.send({
               status: "success",
               message: "Mission Unlocked",
+            });
+          } else if (unlocked_mission.matchedCount > 0) {
+            res.send({
+              status: "failed",
+              message: "Mission already exist in unlocked missions list",
             });
           } else {
             res.send({
