@@ -1,4 +1,5 @@
 import SectorModel from "../models/SectorModel.js";
+import { UserModel } from "../models/UserModel.js";
 import { v4 as uuidv4 } from "uuid";
 class SectorController {
   static add_sector = async (req, res) => {
@@ -413,6 +414,42 @@ class SectorController {
     }
 
     return nearbySectors;
+  };
+
+  static addUnlockedSector = async (req, res) => {
+    const { user_id, mission_id } = req.body;
+    if (user_id && mission_id) {
+      try {
+        const isMissionExist = await SectorModel.findOne({ _id: mission_id });
+        const isUserExist = await UserModel.findOne({ _id: user_id });
+        if (isMissionExist && isUserExist) {
+          const unlocked_mission = await UserModel.updateOne(
+            { _id: user_id },
+            { $push: { unlocked_missions: mission_id } }
+          );
+          if (unlocked_mission.modifiedCount > 0) {
+            res.send({
+              status: "success",
+              message: "Mission Unlocked",
+            });
+          } else {
+            res.send({
+              status: "failed",
+              message: "Mission Unlocked Failed",
+            });
+          }
+        } else {
+          res.send({ status: "failed", message: "Invalid User or Mission Id" });
+        }
+      } catch (error) {
+        res.send({
+          status: "failed",
+          message: error.message,
+        });
+      }
+    } else {
+      res.send({ status: "failed", message: "Invalid parameters" });
+    }
   };
 }
 

@@ -23,6 +23,8 @@ router.get(
   SectorController.get_nearby_sectors
 );
 
+router.put("/unlocked-mission", SectorController.addUnlockedSector);
+
 // Game Api User Routes
 router.get("/", UserController.getAllUser);
 router.post("/register", UserController.register);
