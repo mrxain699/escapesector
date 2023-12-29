@@ -2,6 +2,7 @@ import SectorModel from "../models/SectorModel.js";
 import { UserModel } from "../models/UserModel.js";
 import { v4 as uuidv4 } from "uuid";
 class SectorController {
+  // Add sector
   static add_sector = async (req, res) => {
     const {
       title,
@@ -57,6 +58,7 @@ class SectorController {
     }
   };
 
+  // Update Sector
   static update_sector = async (req, res) => {
     try {
       const { title, difficulty, message, distance, duration, location, id } =
@@ -97,6 +99,7 @@ class SectorController {
     }
   };
 
+  // Delete Sector and tasks and quest realted to particula sector
   static delete_sector = async (req, res) => {
     try {
       const { sectorId } = req.params;
@@ -118,6 +121,7 @@ class SectorController {
     }
   };
 
+  // Get Sector By Id
   static get_sector = async (req, res) => {
     try {
       const { sectorId } = req.params;
@@ -134,6 +138,7 @@ class SectorController {
     }
   };
 
+  // Get Sector Tasks
   static get_sector_tasks = async (req, res) => {
     try {
       const { sectorId } = req.params;
@@ -152,6 +157,7 @@ class SectorController {
     }
   };
 
+  // Get Sector task By Id
   static get_sector_task = async (req, res) => {
     try {
       const { sectorId, taskId } = req.params;
@@ -175,6 +181,7 @@ class SectorController {
     }
   };
 
+  // Add task to the particual sector
   static add_task = async (req, res) => {
     const {
       title,
@@ -212,7 +219,6 @@ class SectorController {
             },
           }
         );
-        console.log(update_sector_tasks);
         if (update_sector_tasks) {
           res.send({ status: "success", message: "Task addedd Successfully!" });
         } else {
@@ -226,6 +232,7 @@ class SectorController {
     }
   };
 
+  // Update task of particual sector
   static update_task = async (req, res) => {
     try {
       const {
@@ -282,6 +289,7 @@ class SectorController {
     }
   };
 
+  // Delete task of particual sector
   static delete_task = async (req, res) => {
     try {
       const { sectorId, taskId } = req.params;
@@ -309,7 +317,7 @@ class SectorController {
     }
   };
 
-  // Function that fetch official sector from database and return as a response
+  // get all official sectors (optional)
   static get_all_official_sectors = async (req, res) => {
     const official_sectors = await SectorModel.find({ official: true });
     if (official_sectors.length > 0) {
@@ -319,6 +327,17 @@ class SectorController {
     }
   };
 
+  // get all community sectors (optional)
+  static get_all_community_sectors = async (req, res) => {
+    const community_sectors = await SectorModel.find({ official: false });
+    if (community_sectors.length > 0) {
+      res.send({ community_sectors: community_sectors });
+    } else {
+      res.send({ status: "failed", message: "Sectors not found" });
+    }
+  };
+
+  // Get all sector based on their type (official/community)
   static sectors = async (req, res) => {
     const { official } = req.params;
     try {
@@ -329,16 +348,6 @@ class SectorController {
         res.send({ status: "failed", message: "Sectors not found" });
       }
     } catch (error) {
-      res.send({ status: "failed", message: "Sectors not found" });
-    }
-  };
-
-  // Function that fetch community sector from database and return as a response
-  static get_all_community_sectors = async (req, res) => {
-    const community_sectors = await SectorModel.find({ official: false });
-    if (community_sectors.length > 0) {
-      res.send({ community_sectors: community_sectors });
-    } else {
       res.send({ status: "failed", message: "Sectors not found" });
     }
   };
@@ -396,6 +405,7 @@ class SectorController {
     return distance;
   };
 
+  // Find nearby sectors
   static findNearbySectors = (userLat, userLon, sectors, maxRadius) => {
     const nearbySectors = [];
 
@@ -416,6 +426,7 @@ class SectorController {
     return nearbySectors;
   };
 
+  // Add unlocked sector/mission to user unlocked_mission
   static addUnlockedSector = async (req, res) => {
     const { user_id, mission_id } = req.body;
     if (user_id && mission_id) {

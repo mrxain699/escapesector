@@ -29,7 +29,7 @@ router.put("/unlocked-mission", SectorController.addUnlockedSector);
 router.get("/", UserController.getAllUser);
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
-router.post("/save-mission", UserController.save_mission);
+router.put("/save-mission", UserController.save_mission);
 
 // Leaderboard Routes
 router.post("/leaderboard", LeaderboardController.AddLeader);
