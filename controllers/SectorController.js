@@ -1,6 +1,5 @@
 import SectorModel from "../models/SectorModel.js";
 import { UserModel } from "../models/UserModel.js";
-import { v4 as uuidv4 } from "uuid";
 class SectorController {
   // Add sector
   static add_sector = async (req, res) => {
@@ -15,7 +14,6 @@ class SectorController {
       official,
       creator,
     } = req.body;
-
     if (
       title &&
       difficulty &&
@@ -36,6 +34,8 @@ class SectorController {
           location: location,
           tasks: tasks,
           official: official,
+          price: req.body.hasOwnProperty("price") ? req.body.price : 0,
+          locked: req.body.hasOwnProperty("locked") ? req.body.locked : false,
           creator: creator,
         });
         await sector
@@ -47,11 +47,11 @@ class SectorController {
               mission_id: savedDoc._id,
             });
           })
-          .catch(() => {
-            res.send({ status: "failed", message: "Failed to save mission" });
+          .catch((error) => {
+            res.send({ status: "failed", message: error.message });
           });
       } catch (error) {
-        res.send({ status: "failed", message: "Unable to connect" });
+        res.send({ status: "failed", message: error.message });
       }
     } else {
       res.send({ status: "failed", message: "All fields are required." });
@@ -81,6 +81,8 @@ class SectorController {
             distance: distance,
             duration: duration,
             location: location,
+            price: req.body.hasOwnProperty("price") ? req.body.price : 0,
+            locked: req.body.hasOwnProperty("locked") ? req.body.locked : false,
           },
         });
         if (update_sector) {
@@ -95,7 +97,7 @@ class SectorController {
         res.send({ status: "failed", message: "All fields are required" });
       }
     } catch (error) {
-      res.send({ status: "failed", message: "Error updating sector" });
+      res.send({ status: "failed", message: error.message });
     }
   };
 
