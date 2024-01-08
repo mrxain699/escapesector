@@ -1,5 +1,6 @@
 import express from "express";
 import UserController from "../controllers/UserController.js";
+import AdminController from "../controllers/AdminController.js";
 import SectorController from "../controllers/SectorController.js";
 import SideQuestController from "../controllers/SideQuestController.js";
 import LeaderboardController from "../controllers/LeaderboardController.js";
@@ -13,6 +14,9 @@ const router = express.Router();
 // router.use("/community-sectors", validate_request);
 // router.use("/nearby-sectors", validate_request);
 // router.use("/add-sector", validate_request);
+
+// Web Api middleware
+router.use("/user", validate_request(AdminModel));
 router.use("/auth/change-password", validate_request(AdminModel));
 
 // Game Api Sector Routes
@@ -23,7 +27,6 @@ router.get(
   "/nearby-sectors/:lat/:long/:official",
   SectorController.get_nearby_sectors
 );
-
 router.put("/unlocked-mission", SectorController.addUnlockedSector);
 
 // Game Api User Routes
@@ -39,14 +42,12 @@ router.get(
   "/leaderboard/:missionId/:userId",
   LeaderboardController.getUserFromLeader
 );
-// Web Api middleware
-router.use("/user", validate_request(AdminModel));
 
 // Web Api User Routes
-router.post("/auth/register", UserController.createUser);
-router.post("/auth", UserController.authenticate);
-router.post("/auth/change-password", UserController.changePassword);
-router.get("/user", UserController.loggedUser);
+router.post("/auth/register", AdminController.createUser);
+router.post("/auth", AdminController.authenticate);
+router.post("/auth/change-password", AdminController.changePassword);
+router.get("/user", AdminController.loggedUser);
 
 // Web api  sectors
 router.get("/sectors/:official", SectorController.sectors);
