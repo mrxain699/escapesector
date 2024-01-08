@@ -122,6 +122,37 @@ class AdminController {
       res.send({ status: "failed", message: error.message });
     }
   };
+
+  static updateUsername = async (req, res) => {
+    const { username } = req.body;
+    try {
+      if (username) {
+        const isUsernameExist = await AdminModel.findOne({
+          username: username,
+        });
+        if (isUsernameExist) {
+          res.send({ status: "failed", message: "Username already exists" });
+        } else {
+          const update_username = await AdminModel.updateOne(
+            {
+              _id: req.user._id,
+            },
+            { $set: { username: username } }
+          );
+          if (update_username.modifiedCount > 0) {
+            res.send({
+              status: "success",
+              message: "Username updated successfully",
+            });
+          } else {
+            res.send({ status: "failed", message: "Invalid Parameters" });
+          }
+        }
+      }
+    } catch (error) {
+      res.send({ status: "failed", message: error.message });
+    }
+  };
 }
 
 export default AdminController;
