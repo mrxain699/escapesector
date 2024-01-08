@@ -187,9 +187,9 @@ class UserController {
         if (password === confirm_password) {
           const salt = await bcrypt.genSalt(16);
           const hash_password = await bcrypt.hash(password, salt);
-          const user = await UserModel.findOne({ _id: req.user._id });
+          const user = await AdminModel.findOne({ _id: req.user._id });
           if (user) {
-            const change_password = await UserModel.updateOne(
+            const change_password = await AdminModel.updateOne(
               { _id: user._id },
               { $set: { password: hash_password } }
             );

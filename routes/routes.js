@@ -13,7 +13,7 @@ const router = express.Router();
 // router.use("/community-sectors", validate_request);
 // router.use("/nearby-sectors", validate_request);
 // router.use("/add-sector", validate_request);
-router.use("/auth/change-password", validate_request);
+router.use("/auth/change-password", validate_request(AdminModel));
 
 // Game Api Sector Routes
 router.post("/add-sector", SectorController.add_sector);
