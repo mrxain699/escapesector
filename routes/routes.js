@@ -13,6 +13,7 @@ const router = express.Router();
 // router.use("/community-sectors", validate_request);
 // router.use("/nearby-sectors", validate_request);
 // router.use("/add-sector", validate_request);
+router.use("/auth/change-password", validate_request);
 
 // Game Api Sector Routes
 router.post("/add-sector", SectorController.add_sector);
@@ -42,7 +43,9 @@ router.get(
 router.use("/user", validate_request(AdminModel));
 
 // Web Api User Routes
+router.post("/auth/register", UserController.createUser);
 router.post("/auth", UserController.authenticate);
+router.post("/auth/change-password", UserController.changePassword);
 router.get("/user", UserController.loggedUser);
 
 // Web api  sectors
